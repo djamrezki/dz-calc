@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <url>
+        <loc>https://aljiz.com/</loc>
+        <priority>1.00</priority>
+        <changefreq>weekly</changefreq>
+    </url>
+
+    <url>
+        <loc>https://aljiz.com/salaire-net-algerie/</loc>
+        <priority>0.90</priority>
+        <changefreq>monthly</changefreq>
+    </url>
+
+    <url>
+        <loc>https://aljiz.com/visa-france-cout/</loc>
+        <priority>0.80</priority>
+        <changefreq>monthly</changefreq>
+    </url>
+
+    <url>
+        <loc>https://aljiz.com/calcul-zakat-dzd/</loc>
+        <priority>0.80</priority>
+        <changefreq>monthly</changefreq>
+    </url>
+
+</urlset>
