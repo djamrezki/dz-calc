@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>Coût visa France / Schengen depuis l’Algérie — estimation (EUR/DZD)</title>
+    <meta name="description" content="Estimez le coût total d’une demande de visa France/Schengen depuis l’Algérie : frais officiels (éditables), frais centre, assurance, documents, transport, extras. 100% navigateur." />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://aljiz.com/visa-france-cout/" />
+
+    <meta property="og:title" content="Coût visa France / Schengen (Algérie) — Aljiz" />
+    <meta property="og:description" content="Estimation du coût total (frais + options) d’une demande de visa depuis l’Algérie. Paramètres modifiables, calcul EUR/DZD." />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#0b1220" />
+
+    <link rel="stylesheet" href="./styles.css" />
+
+    <script type="application/ld+json">
+        {
+            "@context":"https://schema.org",
+            "@type":"FAQPage",
+            "mainEntity":[
+                {
+                    "@type":"Question",
+                    "name":"Les montants affichés sont-ils officiels ?",
+                    "acceptedAnswer":{"@type":"Answer","text":"Non. Cet outil est une estimation. Les frais varient selon la date, la catégorie, le centre et les options. Les champs sont modifiables afin d’entrer vos montants réels."}
+                },
+                {
+                    "@type":"Question",
+                    "name":"Quel taux EUR→DZD utiliser ?",
+                    "acceptedAnswer":{"@type":"Answer","text":"Entrez le taux qui vous convient (banque, bureau de change, référence personnelle). Le total est recalculé en conséquence."}
+                },
+                {
+                    "@type":"Question",
+                    "name":"Mes données sont-elles envoyées à un serveur ?",
+                    "acceptedAnswer":{"@type":"Answer","text":"Non. Tout se calcule localement dans votre navigateur. Aucune donnée n’est transmise."}
+                }
+            ]
+        }
+    </script>
+</head>
+
+<body>
+<header class="top">
+    <div class="wrap top-inner">
+        <a class="back" href="../">← Accueil</a>
+        <div class="title">
+            <h1>Coût visa France / Schengen (depuis l’Algérie)</h1>
+            <p>
+                Estimez le <strong>coût total</strong> : frais officiels (éditables), frais du centre, assurance,
+                documents, transport et extras. Affichage en <strong>EUR</strong> ou <strong>DZD</strong>.
+            </p>
+        </div>
+    </div>
+</header>
+
+<main class="wrap grid">
+    <section class="card">
+        <h2>Votre demande</h2>
+
+        <div class="form-grid">
+            <label class="field">
+                <span>Type de visa</span>
+                <select id="visaType">
+                    <option value="schengen_short_stay">Schengen court séjour</option>
+                    <option value="long_stay">Long séjour (indicatif)</option>
+                </select>
+                <small class="hint">Les règles/frais peuvent varier. Gardez les montants éditables.</small>
+            </label>
+
+            <label class="field">
+                <span>Catégorie</span>
+                <select id="applicantType">
+                    <option value="adult">Adulte</option>
+                    <option value="child_6_11">Enfant (6–11)</option>
+                    <option value="child_under_6">Enfant (&lt; 6)</option>
+                    <option value="exempt">Exempté</option>
+                </select>
+            </label>
+
+            <label class="field">
+                <span>Devise d’affichage</span>
+                <select id="displayCurrency">
+                    <option value="DZD">DZD</option>
+                    <option value="EUR">EUR</option>
+                </select>
+                <small class="hint">Le calcul interne se fait en DZD, avec conversion via le taux.</small>
+            </label>
+
+            <label class="field">
+                <span>Taux EUR → DZD</span>
+                <input id="eurToDzdRate" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Ex: 150" />
+                <small class="hint">Utilisé pour convertir tous les montants en EUR.</small>
+            </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <h2>Frais (éditables)</h2>
+
+        <div class="form-grid">
+            <label class="field">
+                <span>Frais officiels (EUR)</span>
+                <input id="visaFeeEur" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Ex: 80" />
+                <small class="hint">Suggestion auto selon catégorie (modifiable).</small>
+            </label>
+
+            <label class="field">
+                <span>Frais centre / service (EUR) (optionnel)</span>
+                <input id="serviceFeeEur" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0" />
+            </label>
+
+            <label class="field">
+                <span>Assurance voyage (DZD) (optionnel)</span>
+                <input id="insuranceCostDzd" type="number" inputmode="decimal" min="0" placeholder="0" />
+            </label>
+
+            <label class="field">
+                <span>Documents (traductions, légalisation) (DZD) (optionnel)</span>
+                <input id="documentsCostDzd" type="number" inputmode="decimal" min="0" placeholder="0" />
+            </label>
+
+            <label class="field">
+                <span>Transport (DZD) (optionnel)</span>
+                <input id="transportCostDzd" type="number" inputmode="decimal" min="0" placeholder="0" />
+            </label>
+
+            <label class="field">
+                <span>Extras (photos, photocopies, SMS…) (DZD) (optionnel)</span>
+                <input id="extrasCostDzd" type="number" inputmode="decimal" min="0" placeholder="0" />
+            </label>
+        </div>
+
+        <div class="actions">
+            <button id="resetBtn" class="btn secondary" type="button">Réinitialiser</button>
+            <button id="copyBtn" class="btn" type="button">Copier le résultat</button>
+            <button id="shareBtn" class="btn secondary" type="button">Lien partageable</button>
+        </div>
+
+        <p class="disclaimer">
+            ⚠️ <strong>Estimation uniquement.</strong> Les frais officiels, frais de centre et options peuvent changer.
+            Vérifiez toujours les sources officielles et votre centre de dépôt.
+        </p>
+    </section>
+
+    <aside class="card result" aria-live="polite">
+        <h2>Résultat</h2>
+
+        <div class="bigline">
+            <div class="big" id="totalDisplay">—</div>
+            <div class="sub" id="totalLabel">Total estimé</div>
+        </div>
+
+        <div class="status">
+            <div class="badge" id="statusBadge">Info</div>
+            <div class="status-text" id="statusText">Renseignez le taux EUR→DZD (si vous utilisez des frais en EUR).</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3>Détail</h3>
+        <div class="kv">
+            <div class="row"><span>Frais officiels</span><strong id="bVisaFee">—</strong></div>
+            <div class="row"><span>Frais centre</span><strong id="bServiceFee">—</strong></div>
+            <div class="row"><span>Assurance</span><strong id="bInsurance">—</strong></div>
+            <div class="row"><span>Documents</span><strong id="bDocuments">—</strong></div>
+            <div class="row"><span>Transport</span><strong id="bTransport">—</strong></div>
+            <div class="row"><span>Extras</span><strong id="bExtras">—</strong></div>
+            <div class="row total"><span>Total</span><strong id="bTotal">—</strong></div>
+        </div>
+
+        <div class="note" id="noteBox"></div>
+    </aside>
+</main>
+
+<section class="wrap info">
+    <h2>Conseils (rapides)</h2>
+    <ul>
+        <li>Gardez les champs en EUR <strong>éditables</strong> : les montants officiels et frais de centre changent.</li>
+        <li>Utilisez un taux EUR→DZD cohérent avec votre contexte (banque, bureau de change, etc.).</li>
+        <li>Ajoutez les extras (photos, photocopies, SMS) : ils font souvent varier le total réel.</li>
+    </ul>
+    <p class="small">Aucune donnée n’est envoyée : le calcul se fait entièrement dans votre navigateur.</p>
+</section>
+
+<footer class="wrap foot">
+    <small>© <span id="year"></span> aljiz.com — Visa France/Schengen (estimation)</small>
+</footer>
+
+<script src="./app.js"></script>
+</body>
+</html>
