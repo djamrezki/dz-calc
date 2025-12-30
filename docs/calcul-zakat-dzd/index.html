@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>Calcul Zakat DZD (Algérie) — Nissab or/argent, zakat due</title>
+    <meta name="description" content="Calculateur de zakat en dinar algérien (DZD) : nissab or/argent, total zakatable, dettes, zakat due (2,5%). Fonctionne 100% dans le navigateur." />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://aljiz.com/calcul-zakat-dzd/" />
+
+    <meta property="og:title" content="Calcul Zakat DZD — Aljiz" />
+    <meta property="og:description" content="Calculez le nissab et la zakat due en DZD sur épargne, or/argent, stock, créances et dettes." />
+    <meta property="og:type" content="website" />
+
+    <meta name="theme-color" content="#0b1220" />
+    <link rel="stylesheet" href="./styles.css" />
+
+    <script type="application/ld+json">
+        {
+            "@context":"https://schema.org",
+            "@type":"FAQPage",
+            "mainEntity":[
+                {
+                    "@type":"Question",
+                    "name":"Ce calcul de zakat est-il officiel ?",
+                    "acceptedAnswer":{"@type":"Answer","text":"Non. Cet outil est informatif et fournit une estimation basée sur vos saisies. Pour les cas complexes, consultez une personne qualifiée."}
+                },
+                {
+                    "@type":"Question",
+                    "name":"Quelle différence entre nissab or et nissab argent ?",
+                    "acceptedAnswer":{"@type":"Answer","text":"Le nissab est un seuil minimum. Il peut être calculé à partir du prix de l’or (souvent 85g) ou de l’argent (souvent 595g). Selon la méthode choisie et les prix, le seuil varie."}
+                },
+                {
+                    "@type":"Question",
+                    "name":"Mes données sont-elles envoyées à un serveur ?",
+                    "acceptedAnswer":{"@type":"Answer","text":"Non. Tout le calcul se fait dans votre navigateur. Aucune donnée n’est envoyée."}
+                }
+            ]
+        }
+    </script>
+</head>
+
+<body>
+<header class="top">
+    <div class="wrap top-inner">
+        <a class="back" href="../">← Accueil</a>
+        <div class="title">
+            <h1>Calcul Zakat (DZD)</h1>
+            <p>Calculez le <strong>nissab</strong>, le <strong>total zakatable</strong> et la <strong>zakat due</strong> (2,5% par défaut).</p>
+        </div>
+    </div>
+</header>
+
+<main class="wrap grid">
+    <section class="card">
+        <h2>Vos montants</h2>
+
+        <div class="form-grid">
+            <label class="field">
+                <span>Épargne / cash (DZD)</span>
+                <input id="cashDzd" type="number" inputmode="decimal" min="0" placeholder="Ex: 350000" />
+            </label>
+
+            <label class="field">
+                <span>Stock / inventaire (DZD) (optionnel)</span>
+                <input id="inventoryDzd" type="number" inputmode="decimal" min="0" placeholder="0" />
+            </label>
+
+            <label class="field">
+                <span>Créances (argent dû) (DZD) (optionnel)</span>
+                <input id="receivablesDzd" type="number" inputmode="decimal" min="0" placeholder="0" />
+            </label>
+
+            <label class="field">
+                <span>Dettes à court terme (DZD) (optionnel)</span>
+                <input id="debtsDueDzd" type="number" inputmode="decimal" min="0" placeholder="0" />
+            </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <h2>Nissab</h2>
+        <div class="form-grid">
+            <label class="field">
+                <span>Méthode de nissab</span>
+                <select id="nisabMethod">
+                    <option value="gold">Or</option>
+                    <option value="silver">Argent</option>
+                </select>
+            </label>
+
+            <label class="field" id="goldPriceWrap">
+                <span>Prix de l’or / gramme (DZD)</span>
+                <input id="goldPricePerGramDzd" type="number" inputmode="decimal" min="0" placeholder="Ex: 12000" />
+                <small class="hint">Entrez un prix manuel (les prix varient).</small>
+            </label>
+
+            <label class="field" id="silverPriceWrap">
+                <span>Prix de l’argent / gramme (DZD)</span>
+                <input id="silverPricePerGramDzd" type="number" inputmode="decimal" min="0" placeholder="Ex: 150" />
+                <small class="hint">Entrez un prix manuel (les prix varient).</small>
+            </label>
+
+            <label class="field">
+                <span>Nissab (grammes) — or</span>
+                <input id="goldNisabGrams" type="number" inputmode="decimal" min="0" value="85" />
+            </label>
+
+            <label class="field">
+                <span>Nissab (grammes) — argent</span>
+                <input id="silverNisabGrams" type="number" inputmode="decimal" min="0" value="595" />
+            </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <h2>Or / Argent détenus (optionnel)</h2>
+        <div class="form-grid">
+            <label class="field">
+                <span>Or détenu (grammes)</span>
+                <input id="goldGrams" type="number" inputmode="decimal" min="0" placeholder="0" />
+            </label>
+
+            <label class="field">
+                <span>Argent détenu (grammes)</span>
+                <input id="silverGrams" type="number" inputmode="decimal" min="0" placeholder="0" />
+            </label>
+
+            <label class="field">
+                <span>Taux de zakat (%)</span>
+                <input id="zakatRatePct" type="number" inputmode="decimal" min="0" step="0.01" value="2.5" />
+                <small class="hint">En général 2,5% (modifiable si besoin).</small>
+            </label>
+        </div>
+
+        <div class="actions">
+            <button id="resetBtn" class="btn secondary" type="button">Réinitialiser</button>
+            <button id="copyBtn" class="btn" type="button">Copier le résultat</button>
+            <button id="shareBtn" class="btn secondary" type="button">Lien partageable</button>
+        </div>
+
+        <p class="disclaimer">
+            ⚠️ Outil informatif. Pour les cas particuliers (dettes/échéances, types d’actifs, avis juridique/fiqh),
+            vérifiez auprès d’une personne qualifiée.
+        </p>
+    </section>
+
+    <aside class="card result" aria-live="polite">
+        <h2>Résultat</h2>
+
+        <div class="bigline">
+            <div class="big" id="zakatDue">—</div>
+            <div class="sub">Zakat due (DZD)</div>
+        </div>
+
+        <div class="status" id="statusBox">
+            <div class="badge" id="isDueBadge">—</div>
+            <div class="status-text" id="statusText">Renseignez vos montants pour obtenir le résultat.</div>
+        </div>
+
+        <div class="kv">
+            <div class="row"><span>Nissab (DZD)</span><strong id="nisabDzd">—</strong></div>
+            <div class="row"><span>Total des actifs (DZD)</span><strong id="assetsDzd">—</strong></div>
+            <div class="row"><span>Total zakatable (DZD)</span><strong id="zakatableDzd">—</strong></div>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3>Détail</h3>
+        <div class="kv">
+            <div class="row"><span>Cash</span><strong id="bCash">—</strong></div>
+            <div class="row"><span>Stock</span><strong id="bInventory">—</strong></div>
+            <div class="row"><span>Créances</span><strong id="bReceivables">—</strong></div>
+            <div class="row"><span>Valeur or</span><strong id="bGold">—</strong></div>
+            <div class="row"><span>Valeur argent</span><strong id="bSilver">—</strong></div>
+            <div class="row"><span>Dettes (déduites)</span><strong id="bDebts">—</strong></div>
+        </div>
+
+        <div class="note" id="noteBox"></div>
+    </aside>
+</main>
+
+<footer class="wrap foot">
+    <small>© <span id="year"></span> aljiz.com — Calcul Zakat DZD</small>
+</footer>
+
+<script src="./app.js"></script>
+</body>
+</html>
