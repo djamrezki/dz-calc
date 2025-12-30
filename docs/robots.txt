@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://djamrezki.github.io/dz-calc/sitemap.xml
