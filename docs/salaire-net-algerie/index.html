@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>Calcul salaire net Algérie (DZD) — estimation brut → net</title>
+    <meta name="description" content="Calculateur de salaire net en Algérie (DZD) : estimation du net à partir du brut, avec taux CNAS/charges et impôt (optionnel). 100% dans le navigateur." />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="https://aljiz.com/salaire-net-algerie/" />
+
+    <meta property="og:title" content="Salaire net Algérie (DZD) — Aljiz" />
+    <meta property="og:description" content="Estimez le salaire net à partir du brut (DZD) avec déductions et impôt configurables. Tout se calcule dans le navigateur." />
+    <meta property="og:type" content="website" />
+    <meta name="theme-color" content="#0b1220" />
+
+    <link rel="stylesheet" href="./styles.css" />
+
+    <script type="application/ld+json">
+        {
+            "@context":"https://schema.org",
+            "@type":"FAQPage",
+            "mainEntity":[
+                {
+                    "@type":"Question",
+                    "name":"Ce calcul de salaire net est-il officiel ?",
+                    "acceptedAnswer":{"@type":"Answer","text":"Non. Cet outil fournit une estimation basée sur vos saisies et des hypothèses simples. Les règles (taux, bases, arrondis, exemptions) peuvent varier."}
+                },
+                {
+                    "@type":"Question",
+                    "name":"Quels paramètres dois-je saisir pour une estimation correcte ?",
+                    "acceptedAnswer":{"@type":"Answer","text":"Saisissez votre salaire brut, puis votre taux de retenue salarié (charges/assurance) si vous le connaissez, et choisissez le mode d’impôt (aucun ou taux fixe)."}
+                },
+                {
+                    "@type":"Question",
+                    "name":"Mes données sont-elles envoyées à un serveur ?",
+                    "acceptedAnswer":{"@type":"Answer","text":"Non. Les calculs s’effectuent entièrement dans votre navigateur. Aucune donnée n’est transmise."}
+                }
+            ]
+        }
+    </script>
+</head>
+
+<body>
+<header class="top">
+    <div class="wrap top-inner">
+        <a class="back" href="../">← Accueil</a>
+        <div class="title">
+            <h1>Salaire net Algérie (estimation)</h1>
+            <p>
+                Estimez votre <strong>salaire net mensuel</strong> en DZD à partir du brut, avec déductions configurables
+                (charges salariales + impôt optionnel).
+            </p>
+        </div>
+    </div>
+</header>
+
+<main class="wrap grid">
+    <section class="card">
+        <h2>Entrées</h2>
+
+        <div class="form-grid">
+            <label class="field">
+                <span>Salaire brut (mensuel) — DZD</span>
+                <input id="grossMonthlyDzd" type="number" inputmode="decimal" min="0" placeholder="Ex: 120000" />
+            </label>
+
+            <label class="field">
+                <span>Primes / indemnités — DZD (optionnel)</span>
+                <input id="allowancesDzd" type="number" inputmode="decimal" min="0" placeholder="0" />
+                <small class="hint">Ajoutées au brut pour cette estimation.</small>
+            </label>
+
+            <label class="field">
+                <span>Taux retenue salarié (%) (optionnel)</span>
+                <input id="employeeSocialRatePct" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Ex: 9" />
+                <small class="hint">Ex: charges salariales / assurance. Si inconnu, laissez vide.</small>
+            </label>
+
+            <label class="field">
+                <span>Autres déductions fixes — DZD (optionnel)</span>
+                <input id="otherDeductionsDzd" type="number" inputmode="decimal" min="0" placeholder="0" />
+            </label>
+        </div>
+
+        <div class="divider"></div>
+
+        <h2>Impôt (optionnel)</h2>
+        <div class="form-grid">
+            <label class="field">
+                <span>Mode d’impôt</span>
+                <select id="taxMode">
+                    <option value="none">Aucun</option>
+                    <option value="flatRate">Taux fixe</option>
+                </select>
+                <small class="hint">Le mode “barème officiel” peut être ajouté plus tard (avec sources et mise à jour).</small>
+            </label>
+
+            <label class="field" id="taxRateWrap">
+                <span>Taux d’impôt (%)</span>
+                <input id="taxRatePct" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Ex: 10" />
+                <small class="hint">Appliqué sur la base imposable (brut + primes − charges).</small>
+            </label>
+
+            <label class="field">
+                <span>Fréquence d’affichage</span>
+                <select id="payFrequency">
+                    <option value="monthly">Mensuel (par défaut)</option>
+                    <option value="yearly">Annuel (approx.)</option>
+                </select>
+                <small class="hint">Le calcul interne reste mensuel, l’affichage peut être annualisé.</small>
+            </label>
+        </div>
+
+        <div class="actions">
+            <button id="resetBtn" class="btn secondary" type="button">Réinitialiser</button>
+            <button id="copyBtn" class="btn" type="button">Copier le résultat</button>
+            <button id="shareBtn" class="btn secondary" type="button">Lien partageable</button>
+        </div>
+
+        <p class="disclaimer">
+            ⚠️ <strong>Estimation uniquement.</strong> Les taux, bases, arrondis, plafonds, exemptions et règles fiscales peuvent varier
+            selon votre situation. Vérifiez votre fiche de paie et/ou une source officielle.
+        </p>
+    </section>
+
+    <aside class="card result" aria-live="polite">
+        <h2>Résultat</h2>
+
+        <div class="bigline">
+            <div class="big" id="netDisplay">—</div>
+            <div class="sub" id="netLabel">Salaire net (mensuel) — DZD</div>
+        </div>
+
+        <div class="status">
+            <div class="badge" id="modeBadge">MVP</div>
+            <div class="status-text" id="statusText">
+                Renseignez le brut pour obtenir une estimation.
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <h3>Décomposition</h3>
+        <div class="kv">
+            <div class="row"><span>Brut + primes</span><strong id="bGross">—</strong></div>
+            <div class="row"><span>Charges salariales</span><strong id="bSocial">—</strong></div>
+            <div class="row"><span>Base imposable</span><strong id="bTaxBase">—</strong></div>
+            <div class="row"><span>Impôt</span><strong id="bTax">—</strong></div>
+            <div class="row"><span>Autres déductions</span><strong id="bOther">—</strong></div>
+            <div class="row total"><span>Net estimé</span><strong id="bNet">—</strong></div>
+        </div>
+
+        <div class="note" id="noteBox"></div>
+    </aside>
+</main>
+
+<section class="wrap info">
+    <h2>Comment ça marche ?</h2>
+    <p>
+        Le calcul applique une formule simple :
+        <strong>net = (brut + primes) − charges − impôt − autres déductions</strong>.
+        Si vous choisissez “taux fixe”, l’impôt est calculé sur la base :
+        <strong>(brut + primes − charges)</strong>.
+    </p>
+    <p class="small">
+        Conseil : pour une estimation réaliste, utilisez les taux visibles sur une fiche de paie récente ou vos paramètres habituels.
+    </p>
+</section>
+
+<footer class="wrap foot">
+    <small>© <span id="year"></span> aljiz.com — Salaire net (estimation)</small>
+</footer>
+
+<script src="./app.js"></script>
+</body>
+</html>

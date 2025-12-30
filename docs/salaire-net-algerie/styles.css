@@ -1,0 +1,171 @@
+:root{
+  --bg:#0b1220;
+  --card:#111a2e;
+  --text:#e9eefc;
+  --muted:#b8c3e6;
+  --link:#9cc7ff;
+  --border:rgba(255,255,255,.10);
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+  --radius:16px;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  color:var(--text);
+  background: radial-gradient(1200px 800px at 20% 0%, #172243 0%, var(--bg) 55%) fixed;
+  line-height:1.5;
+}
+
+a{color:var(--link); text-decoration:none}
+a:hover{text-decoration:underline}
+
+.wrap{max-width:1060px; margin:0 auto; padding:18px}
+
+.top{
+  position:sticky; top:0; z-index:5;
+  backdrop-filter: blur(10px);
+  background: rgba(11,18,32,.65);
+  border-bottom:1px solid var(--border);
+}
+.top-inner{display:flex; gap:14px; align-items:flex-start; padding:14px 18px}
+.back{
+  border:1px solid var(--border);
+  padding:8px 10px;
+  border-radius:12px;
+  background: rgba(156,199,255,.08);
+  color:var(--text);
+  white-space:nowrap;
+}
+.back:hover{background: rgba(156,199,255,.14); text-decoration:none}
+.title h1{margin:0; font-size: clamp(20px, 3vw, 30px)}
+.title p{margin:6px 0 0 0; color:var(--muted); max-width:75ch}
+
+.grid{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:14px;
+}
+@media (min-width: 980px){
+  .grid{grid-template-columns: 1.2fr .8fr; align-items:start}
+}
+
+.card{
+  border:1px solid var(--border);
+  background: rgba(17,26,46,.72);
+  border-radius: var(--radius);
+  padding:16px;
+  box-shadow: var(--shadow);
+}
+
+h2{margin:0 0 12px 0; font-size:18px}
+h3{margin:0 0 10px 0; font-size:15px; color:var(--muted)}
+
+.form-grid{
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:12px;
+}
+@media (min-width: 720px){
+  .form-grid{grid-template-columns: 1fr 1fr}
+}
+
+.field{display:flex; flex-direction:column; gap:6px}
+.field span{font-weight:600}
+.field input, .field select{
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background: rgba(0,0,0,.18);
+  color:var(--text);
+  outline:none;
+}
+.field input::placeholder{color: rgba(233,238,252,.45)}
+.field small.hint{color:var(--muted)}
+
+.divider{
+  height:1px;
+  background: var(--border);
+  margin:16px 0;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+
+.btn{
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background: rgba(156,199,255,.14);
+  color:var(--text);
+  font-weight:700;
+  cursor:pointer;
+}
+.btn:hover{background: rgba(156,199,255,.20)}
+.btn.secondary{background: rgba(0,0,0,.15)}
+.btn.secondary:hover{background: rgba(0,0,0,.22)}
+
+.disclaimer{
+  margin-top:14px;
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.14);
+  background: rgba(0,0,0,.18);
+  color: var(--muted);
+  font-size:13px;
+}
+
+.result .bigline{display:flex; flex-direction:column; gap:4px; margin-bottom:12px}
+.big{font-size: clamp(26px, 4vw, 42px); font-weight:900; letter-spacing:-0.02em}
+.sub{color:var(--muted); font-size:13px}
+
+.status{
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:10px 12px;
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  margin: 10px 0 14px;
+  background: rgba(0,0,0,.12);
+}
+.badge{
+  padding:6px 10px;
+  border-radius:999px;
+  font-weight:800;
+  border:1px solid var(--border);
+  background: rgba(156,199,255,.12);
+}
+.status-text{color:var(--muted); font-size:13px}
+
+.kv{display:flex; flex-direction:column; gap:8px}
+.kv .row{display:flex; justify-content:space-between; gap:10px}
+.kv .row span{color:var(--muted)}
+.kv .row strong{font-weight:800}
+.kv .row.total strong{font-weight:900}
+
+.note{
+  margin-top:14px;
+  font-size:13px;
+  color:var(--muted);
+  padding:10px 12px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background: rgba(0,0,0,.10);
+  min-height: 18px;
+}
+
+.info{
+  border:1px solid var(--border);
+  background: rgba(17,26,46,.45);
+  border-radius: var(--radius);
+  padding:16px 18px;
+}
+.small{font-size:12px; color:var(--muted)}
+
+.foot{padding-top:6px; padding-bottom:22px; color:var(--muted)}
