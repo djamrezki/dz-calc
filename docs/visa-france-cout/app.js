@@ -1,6 +1,7 @@
 (() => {
   const fmtDzd0 = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 });
-  const fmtEur2 = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 2 });
+  const fmtEur2 = new Intl.NumberFormat("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
 
   const $ = (id) => document.getElementById(id);
 
@@ -33,7 +34,7 @@
   };
 
   // Default suggestions (editable)
-  const suggestedVisaFeeEur = (visaType, applicantType) => {
+  const suggestedVisaFeeEur = (applicantType) => {
     // Common heuristic (NOT official): adult ~80, child 6-11 ~40, under 6 ~0, exempt ~0
     // Long stay varies widely; keep same suggestion to encourage editing.
     if (applicantType === "child_under_6" || applicantType === "exempt") return 0;
@@ -46,9 +47,8 @@
     const cur = ($("visaFeeEur").value ?? "").toString().trim();
     if (cur !== "") return;
 
-    const visaType = $("visaType").value;
     const applicantType = $("applicantType").value;
-    setVal("visaFeeEur", String(suggestedVisaFeeEur(visaType, applicantType)));
+    setVal("visaFeeEur", String(suggestedVisaFeeEur(applicantType)));
   };
 
   const buildQuery = () => {
@@ -103,18 +103,28 @@
     const missingRate = usesEur && rate <= 0;
 
     if (missingRate) {
-      statusText.textContent = "Entrez le taux EUR→DZD pour convertir les frais en EUR.";
+      const wantsEur = display === "EUR";
+
+      statusText.textContent = wantsEur
+        ? "Entrez le taux EUR→DZD pour afficher le total en EUR. Les postes saisis en DZD restent affichés en DZD tant que le taux n’est pas renseigné."
+        : "Entrez le taux EUR→DZD pour convertir les frais saisis en EUR.";
+
       $("totalDisplay").textContent = "—";
       $("totalLabel").textContent = "Total estimé";
       $("bVisaFee").textContent = "—";
       $("bServiceFee").textContent = "—";
-      $("bInsurance").textContent = display === "EUR" ? formatEur(insuranceDzd / Math.max(rate, 1)) : formatDzd(insuranceDzd);
-      $("bDocuments").textContent = display === "EUR" ? formatEur(documentsDzd / Math.max(rate, 1)) : formatDzd(documentsDzd);
-      $("bTransport").textContent = display === "EUR" ? formatEur(transportDzd / Math.max(rate, 1)) : formatDzd(transportDzd);
-      $("bExtras").textContent = display === "EUR" ? formatEur(extrasDzd / Math.max(rate, 1)) : formatDzd(extrasDzd);
+
+      const showDzdOnly = (dzd) => formatDzd(dzd);
+
+      $("bInsurance").textContent = showDzdOnly(insuranceDzd);
+      $("bDocuments").textContent = showDzdOnly(documentsDzd);
+      $("bTransport").textContent = showDzdOnly(transportDzd);
+      $("bExtras").textContent = showDzdOnly(extrasDzd);
+
       $("bTotal").textContent = "—";
       return;
     }
+
 
     // Render in selected currency
     const toDisplay = (dzd) => {

@@ -1,6 +1,7 @@
 (() => {
   const fmtDzd0 = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 });
-  const fmtDzd2 = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 2 });
+  const fmtDzd2 = new Intl.NumberFormat("fr-FR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
 
   const $ = (id) => document.getElementById(id);
 
@@ -98,7 +99,7 @@
     // Display: monthly or yearly
     const netShown = payFrequency === "yearly" ? (netMonthly * 12) : netMonthly;
 
-    $("netDisplay").textContent = formatMoney2(netShown);
+    $("netDisplay").textContent = formatMoney0(netShown);
     $("netLabel").textContent = payFrequency === "yearly"
       ? "Salaire net (annuel approx.) — DZD"
       : "Salaire net (mensuel) — DZD";
@@ -124,7 +125,7 @@
     const warnings = [];
     if (socialRatePct > 25) warnings.push("Taux de retenue élevé : vérifiez la valeur saisie.");
     if (taxMode === "flatRate" && taxRatePct > 60) warnings.push("Taux d’impôt élevé : vérifiez la valeur saisie.");
-    if (otherDeductions > gross) warnings.push("Les autres déductions dépassent le brut + primes (net ramené à 0).");
+    if ((social + tax + otherDeductions) > gross) warnings.push("Les déductions dépassent le brut + primes (net ramené à 0).");
 
     statusText.textContent = "Estimation calculée avec vos paramètres.";
     if (warnings.length) noteBox.textContent = "⚠️ " + warnings.join(" ");
