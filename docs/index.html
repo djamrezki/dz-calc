@@ -144,15 +144,23 @@
                     "name":"Ces calculatrices sont-elles officielles ?",
                     "acceptedAnswer":{
                         "@type":"Answer",
-                        "text":"Non. Ce sont des outils informatifs qui donnent des estimations basées sur vos saisies et des hypothèses. Vérifiez toujours avec les sources officielles ou votre situation personnelle."
+                        "text":"Non. Ce sont des outils informatifs qui fournissent des estimations à partir de vos saisies. Les règles et tarifs peuvent évoluer et certaines situations nécessitent une vérification auprès de sources officielles ou d’un professionnel."
                     }
                 },
                 {
                     "@type":"Question",
-                    "name":"Les calculs fonctionnent-ils sans compte et sans serveur ?",
+                    "name":"Mes données sont-elles envoyées à un serveur ?",
                     "acceptedAnswer":{
                         "@type":"Answer",
-                        "text":"Oui. Tout se passe dans votre navigateur (HTML/CSS/JavaScript). Aucune donnée n’est envoyée à un serveur."
+                        "text":"Non. Les calculs s’exécutent entièrement dans votre navigateur. Aucune donnée n’est transmise ou stockée sur un serveur par Aljiz."
+                    }
+                },
+                {
+                    "@type":"Question",
+                    "name":"Pourquoi les résultats peuvent-ils différer d’un document officiel (fiche de paie, devis, etc.) ?",
+                    "acceptedAnswer":{
+                        "@type":"Answer",
+                        "text":"Parce que les paramètres réels peuvent varier (taux, exemptions, arrondis, catégories, frais optionnels, prix de référence). Les outils appliquent des hypothèses simplifiées et vos valeurs saisies."
                     }
                 },
                 {
@@ -160,7 +168,7 @@
                     "name":"Puis-je partager un résultat ?",
                     "acceptedAnswer":{
                         "@type":"Answer",
-                        "text":"Les pages sont conçues pour afficher un résumé copiable. Certaines peuvent proposer un lien partageable via l’URL (selon l’implémentation)."
+                        "text":"Oui. Les pages proposent un résumé copiable, et certaines calculatrices peuvent générer un lien partageable contenant les valeurs saisies via l’URL."
                     }
                 }
             ]
@@ -240,17 +248,38 @@
     </div>
 
     <section>
-        <h2>FAQ (rapide)</h2>
+        <h2>FAQ</h2>
         <ul>
-            <li><strong>Est-ce officiel ?</strong> Non, ce sont des estimations basées sur vos saisies.</li>
-            <li><strong>Mes données sont-elles envoyées ?</strong> Non, tout reste dans le navigateur.</li>
-            <li><strong>Pourquoi “estimation” ?</strong> Les règles/paramètres peuvent varier et évoluer.</li>
+            <li>
+                <strong>Ces calculatrices sont-elles officielles ?</strong><br/>
+                Non. Ce sont des outils informatifs qui fournissent des <strong>estimations</strong> à partir de vos saisies.
+                Pour une décision importante, vérifiez auprès de sources officielles ou d’un professionnel.
+            </li>
+            <li>
+                <strong>Mes données sont-elles envoyées à un serveur ?</strong><br/>
+                Non. Tout se calcule <strong>dans votre navigateur</strong>. Aljiz ne collecte pas vos montants via un backend.
+            </li>
+            <li>
+                <strong>Pourquoi un écart avec une fiche de paie, un devis ou un calcul administratif ?</strong><br/>
+                Des paramètres peuvent varier (taux, exemptions, arrondis, catégories, frais optionnels, prix de référence).
+                Les outils appliquent des hypothèses simplifiées et vos valeurs saisies.
+            </li>
+            <li>
+                <strong>Puis-je partager un résultat ?</strong><br/>
+                Oui : le résultat est copiable, et certaines pages peuvent proposer un lien partageable via l’URL.
+            </li>
         </ul>
     </section>
 
+
     <footer>
         <div>© <span id="year"></span> aljiz.com</div>
+        <div class="small">
+            Outils informatifs — <strong>aucun conseil fiscal, juridique ou religieux</strong>.
+            Les informations peuvent changer. Utilisation à vos risques.
+        </div>
     </footer>
+
 </div>
 
 <script>
