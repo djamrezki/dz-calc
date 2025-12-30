@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+    <title>Aljiz — Calculatrices DZ (salaire net, visa France/Schengen, zakat)</title>
+    <meta name="description" content="3 calculatrices simples pour l’Algérie : estimation du salaire net, estimation des coûts visa France/Schengen depuis l’Algérie, et calcul de la zakat en DZD." />
+    <meta name="robots" content="index,follow" />
+
+    <!-- Canonical: update once your custom domain is live -->
+    <link rel="canonical" href="https://aljiz.com/" />
+
+    <!-- Social preview -->
+    <meta property="og:title" content="Aljiz — Calculatrices DZ" />
+    <meta property="og:description" content="Salaire net (estimation), coûts visa France/Schengen, zakat en DZD. 100% gratuit, rapide, et côté navigateur." />
+    <meta property="og:type" content="website" />
+
+    <meta name="theme-color" content="#0b1220" />
+
+    <style>
+        :root{
+          --bg:#0b1220;
+          --card:#111a2e;
+          --text:#e9eefc;
+          --muted:#b8c3e6;
+          --link:#9cc7ff;
+          --border:rgba(255,255,255,.10);
+          --shadow: 0 10px 30px rgba(0,0,0,.35);
+          --radius:16px;
+        }
+        *{box-sizing:border-box}
+        body{
+          margin:0;
+          font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+          background: radial-gradient(1200px 800px at 20% 0%, #172243 0%, var(--bg) 55%) fixed;
+          color:var(--text);
+          line-height:1.5;
+        }
+        a{color:var(--link); text-decoration:none}
+        a:hover{text-decoration:underline}
+        .wrap{max-width:1060px; margin:0 auto; padding:28px 18px 56px}
+        header{
+          display:flex;
+          flex-direction:column;
+          gap:10px;
+          padding:24px 18px;
+          border:1px solid var(--border);
+          background:rgba(17,26,46,.6);
+          backdrop-filter: blur(8px);
+          border-radius: var(--radius);
+          box-shadow: var(--shadow);
+        }
+        .brand{
+          display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+        }
+        .logo{
+          width:40px; height:40px; border-radius:12px;
+          background: linear-gradient(135deg, #3aa0ff, #7c4dff);
+          box-shadow: 0 10px 20px rgba(124,77,255,.25);
+        }
+        h1{font-size: clamp(22px, 3.2vw, 34px); margin:0}
+        .subtitle{color:var(--muted); margin:0; max-width:70ch}
+        .grid{
+          display:grid;
+          grid-template-columns: repeat(12, 1fr);
+          gap:14px;
+          margin-top:16px;
+        }
+        .card{
+          grid-column: span 12;
+          border:1px solid var(--border);
+          background: rgba(17,26,46,.72);
+          border-radius: var(--radius);
+          padding:16px;
+          box-shadow: var(--shadow);
+        }
+        .card h2{margin:0 0 6px 0; font-size:18px}
+        .card p{margin:0; color:var(--muted)}
+        .card .meta{margin-top:10px; display:flex; gap:10px; flex-wrap:wrap}
+        .pill{
+          border:1px solid var(--border);
+          color:var(--muted);
+          padding:4px 10px;
+          border-radius:999px;
+          font-size:12px;
+        }
+        .cta{
+          margin-top:12px;
+          display:inline-flex;
+          align-items:center;
+          gap:8px;
+          padding:10px 12px;
+          border-radius:12px;
+          border:1px solid var(--border);
+          background: rgba(156,199,255,.10);
+          color:var(--text);
+          font-weight:600;
+        }
+        .cta:hover{background: rgba(156,199,255,.18); text-decoration:none}
+        .cols-6{grid-column: span 12}
+        @media (min-width:860px){
+          .cols-6{grid-column: span 6}
+        }
+        section{
+          margin-top:18px;
+          padding:16px 18px;
+          border:1px solid var(--border);
+          background: rgba(17,26,46,.45);
+          border-radius: var(--radius);
+        }
+        section h2{margin:0 0 10px 0; font-size:18px}
+        ul{margin:10px 0 0 18px; color:var(--muted)}
+        .disclaimer{
+          margin-top:14px;
+          padding:12px 14px;
+          border-radius:14px;
+          border:1px solid rgba(255,255,255,.14);
+          background: rgba(0,0,0,.18);
+          color: var(--muted);
+          font-size:13px;
+        }
+        footer{
+          margin-top:18px;
+          color:var(--muted);
+          font-size:13px;
+          display:flex;
+          flex-wrap:wrap;
+          gap:10px;
+          justify-content:space-between;
+          padding:0 2px;
+        }
+        .small{font-size:12px; color:var(--muted)}
+    </style>
+
+    <!-- FAQ schema -->
+    <script type="application/ld+json">
+        {
+            "@context":"https://schema.org",
+            "@type":"FAQPage",
+            "mainEntity":[
+                {
+                    "@type":"Question",
+                    "name":"Ces calculatrices sont-elles officielles ?",
+                    "acceptedAnswer":{
+                        "@type":"Answer",
+                        "text":"Non. Ce sont des outils informatifs qui donnent des estimations basées sur vos saisies et des hypothèses. Vérifiez toujours avec les sources officielles ou votre situation personnelle."
+                    }
+                },
+                {
+                    "@type":"Question",
+                    "name":"Les calculs fonctionnent-ils sans compte et sans serveur ?",
+                    "acceptedAnswer":{
+                        "@type":"Answer",
+                        "text":"Oui. Tout se passe dans votre navigateur (HTML/CSS/JavaScript). Aucune donnée n’est envoyée à un serveur."
+                    }
+                },
+                {
+                    "@type":"Question",
+                    "name":"Puis-je partager un résultat ?",
+                    "acceptedAnswer":{
+                        "@type":"Answer",
+                        "text":"Les pages sont conçues pour afficher un résumé copiable. Certaines peuvent proposer un lien partageable via l’URL (selon l’implémentation)."
+                    }
+                }
+            ]
+        }
+    </script>
+</head>
+
+<body>
+<div class="wrap">
+    <header>
+        <div class="brand">
+            <div class="logo" aria-hidden="true"></div>
+            <h1>Aljiz — Calculatrices DZ</h1>
+        </div>
+        <p class="subtitle">
+            3 outils rapides (100% côté navigateur) pour l’Algérie : <strong>salaire net</strong> (estimation),
+            <strong>coût visa France/Schengen</strong> (estimation), et <strong>calcul de la zakat</strong> en DZD.
+        </p>
+        <div class="disclaimer">
+            <strong>⚠️ Avertissement :</strong> ces calculatrices fournissent des <strong>estimations</strong> à titre informatif.
+            Elles ne constituent pas un conseil fiscal, juridique ou religieux. Les règles et tarifs peuvent changer, et certaines situations
+            nécessitent une vérification par des sources officielles ou un professionnel.
+        </div>
+    </header>
+
+    <div class="grid" aria-label="Liste des calculatrices">
+        <article class="card cols-6">
+            <h2>1) Salaire net Algérie (estimation)</h2>
+            <p>Convertir un salaire brut en salaire net avec des taux et déductions configurables.</p>
+            <div class="meta">
+                <span class="pill">DZD</span>
+                <span class="pill">Brut → Net</span>
+                <span class="pill">Mode simple (MVP)</span>
+            </div>
+            <a class="cta" href="./salaire-net-algerie/">Ouvrir la calculatrice →</a>
+        </article>
+
+        <article class="card cols-6">
+            <h2>2) Coût visa France / Schengen (depuis l’Algérie)</h2>
+            <p>Estimer le coût total (frais + options) d’une demande de visa en fonction de votre cas.</p>
+            <div class="meta">
+                <span class="pill">EUR ↔ DZD</span>
+                <span class="pill">Frais + extras</span>
+                <span class="pill">Modifiable</span>
+            </div>
+            <a class="cta" href="./visa-france-cout/">Ouvrir la calculatrice →</a>
+        </article>
+
+        <article class="card cols-6">
+            <h2>3) Calcul zakat (DZD)</h2>
+            <p>Calculer le nissab et la zakat due sur argent, or/argent (grammes), stock, créances et dettes.</p>
+            <div class="meta">
+                <span class="pill">Nissab or/argent</span>
+                <span class="pill">2,5%</span>
+                <span class="pill">DZD</span>
+            </div>
+            <a class="cta" href="./calcul-zakat-dzd/">Ouvrir la calculatrice →</a>
+        </article>
+
+        <article class="card cols-6">
+            <h2>À propos</h2>
+            <p>
+                Objectif : fournir des pages rapides, claires et partageables. Les données restent sur votre appareil.
+                Langue : français (AR optionnel plus tard).
+            </p>
+            <div class="meta">
+                <span class="pill">Sans compte</span>
+                <span class="pill">Sans backend</span>
+                <span class="pill">GitHub Pages</span>
+            </div>
+            <a class="cta" href="https://github.com/djamrezki/dz-calc" rel="noopener">Code source (GitHub) →</a>
+            <p class="small" style="margin-top:10px;">
+                Astuce : remplacez ce lien par votre repo (ex. https://github.com/&lt;user&gt;/dz-calc).
+            </p>
+        </article>
+    </div>
+
+    <section>
+        <h2>FAQ (rapide)</h2>
+        <ul>
+            <li><strong>Est-ce officiel ?</strong> Non, ce sont des estimations basées sur vos saisies.</li>
+            <li><strong>Mes données sont-elles envoyées ?</strong> Non, tout reste dans le navigateur.</li>
+            <li><strong>Pourquoi “estimation” ?</strong> Les règles/paramètres peuvent varier et évoluer.</li>
+        </ul>
+    </section>
+
+    <footer>
+        <div>© <span id="year"></span> aljiz.com</div>
+        <div class="small">Contact / mentions : à ajouter (optionnel)</div>
+    </footer>
+</div>
+
+<script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
