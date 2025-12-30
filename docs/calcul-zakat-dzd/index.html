@@ -3,14 +3,17 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta property="og:url" content="https://aljiz.com/calcul-zakat-dzd/" />
+    <meta name="twitter:card" content="summary" />
 
-    <title>Calcul Zakat DZD (Algérie) — Nissab or/argent, zakat due</title>
-    <meta name="description" content="Calculateur de zakat en dinar algérien (DZD) : nissab or/argent, total zakatable, dettes, zakat due (2,5%). Fonctionne 100% dans le navigateur." />
+
+    <title>Calcul Zakat en DZD (Algérie) — Nisab Or/Argent, montant à payer (2,5%)</title>
+    <meta name="description" content="Calcul Zakat en DZD (Algérie) : calculez le Nisab (or/argent), le total zakatable, les dettes déductibles et le montant à payer (2,5%). Outil informatif." />
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href="https://aljiz.com/calcul-zakat-dzd/" />
 
     <meta property="og:title" content="Calcul Zakat DZD — Aljiz" />
-    <meta property="og:description" content="Calculez le nissab et la zakat due en DZD sur épargne, or/argent, stock, créances et dettes." />
+    <meta property="og:description" content="Calculez le Nisab et la zakat due en DZD sur épargne, or/argent, stock, créances et dettes." />
     <meta property="og:type" content="website" />
 
     <meta name="theme-color" content="#0b1220" />
@@ -24,12 +27,37 @@
                 {
                     "@type":"Question",
                     "name":"Ce calcul de zakat est-il officiel ?",
-                    "acceptedAnswer":{"@type":"Answer","text":"Non. Cet outil est informatif et fournit une estimation basée sur vos saisies. Pour les cas complexes, consultez une personne qualifiée."}
+                    "acceptedAnswer":{"@type":"Answer","text":"Non. Cet outil est informatif et fournit une estimation basée sur vos saisies (prix du gramme, montants, dettes). Pour les cas complexes, demandez l’avis d’une personne qualifiée."}
                 },
                 {
                     "@type":"Question",
-                    "name":"Quelle différence entre nissab or et nissab argent ?",
-                    "acceptedAnswer":{"@type":"Answer","text":"Le nissab est un seuil minimum. Il peut être calculé à partir du prix de l’or (souvent 85g) ou de l’argent (souvent 595g). Selon la méthode choisie et les prix, le seuil varie."}
+                    "name":"Qu’est-ce que le Nisab (Nisab) ?",
+                    "acceptedAnswer":{"@type":"Answer","text":"Le Nisab est un seuil minimal de richesse (souvent exprimé en équivalent or ou argent). Si votre total zakatable atteint ou dépasse ce seuil, la zakat peut être due."}
+                },
+                {
+                    "@type":"Question",
+                    "name":"Quelle différence entre Nisab or (85g) et Nisab argent (595g) ?",
+                    "acceptedAnswer":{"@type":"Answer","text":"Le Nisab peut être évalué via l’or (souvent 85g) ou l’argent (souvent 595g). Comme les prix de l’or et de l’argent diffèrent, le seuil en DZD varie selon la méthode et le prix du gramme."}
+                },
+                {
+                    "@type":"Question",
+                    "name":"Pourquoi dois-je saisir le prix du gramme d’or/argent ?",
+                    "acceptedAnswer":{"@type":"Answer","text":"Les prix varient selon la période et le marché. En saisissant votre propre prix par gramme, vous obtenez un seuil (Nisab) cohérent avec votre contexte."}
+                },
+                {
+                    "@type":"Question",
+                    "name":"Quels montants inclure dans le total zakatable ?",
+                    "acceptedAnswer":{"@type":"Answer","text":"En général, on considère l’épargne/cash, certaines créances récupérables, et parfois la valeur de stock/inventaire. L’outil additionne les éléments que vous saisissez et affiche le détail."}
+                },
+                {
+                    "@type":"Question",
+                    "name":"Les dettes sont-elles déductibles ?",
+                    "acceptedAnswer":{"@type":"Answer","text":"Selon les avis, certaines dettes à court terme peuvent réduire le total zakatable. L’outil vous permet de renseigner des dettes à court terme afin d’obtenir un total zakatable après déduction."}
+                },
+                {
+                    "@type":"Question",
+                    "name":"Le taux de 2,5% est-il toujours applicable ?",
+                    "acceptedAnswer":{"@type":"Answer","text":"Le taux de 2,5% est une référence fréquente pour certains biens zakatables. L’outil vous laisse modifier le taux si votre situation nécessite un autre paramètre."}
                 },
                 {
                     "@type":"Question",
@@ -47,7 +75,7 @@
         <a class="back" href="../">← Accueil</a>
         <div class="title">
             <h1>Calcul Zakat (DZD)</h1>
-            <p>Calculez le <strong>nissab</strong>, le <strong>total zakatable</strong> et la <strong>zakat due</strong> (2,5% par défaut).</p>
+            <p>Calculez le <strong>Nisab</strong>, le <strong>total zakatable</strong> et la <strong>zakat due</strong> (2,5% par défaut).</p>
         </div>
     </div>
 </header>
@@ -80,11 +108,11 @@
 
         <div class="divider"></div>
 
-        <h2>Nissab</h2>
+        <h2>Nisab</h2>
         <div class="form-grid">
             <label class="field">
-                <span>Méthode de nissab</span>
-                <select id="nisabMethod">
+                <span>Méthode de Nisab</span>
+                <select id="NisabMethod">
                     <option value="gold">Or</option>
                     <option value="silver">Argent</option>
                 </select>
@@ -103,12 +131,12 @@
             </label>
 
             <label class="field">
-                <span>Nissab (grammes) — or</span>
+                <span>Nisab (grammes) — or</span>
                 <input id="goldNisabGrams" type="number" inputmode="decimal" min="0" value="85" />
             </label>
 
             <label class="field">
-                <span>Nissab (grammes) — argent</span>
+                <span>Nisab (grammes) — argent</span>
                 <input id="silverNisabGrams" type="number" inputmode="decimal" min="0" value="595" />
             </label>
         </div>
@@ -160,7 +188,7 @@
         </div>
 
         <div class="kv">
-            <div class="row"><span>Nissab (DZD)</span><strong id="nisabDzd">—</strong></div>
+            <div class="row"><span>Nisab (DZD)</span><strong id="NisabDzd">—</strong></div>
             <div class="row"><span>Total des actifs (DZD)</span><strong id="assetsDzd">—</strong></div>
             <div class="row"><span>Total zakatable (DZD)</span><strong id="zakatableDzd">—</strong></div>
         </div>
@@ -181,9 +209,79 @@
     </aside>
 </main>
 
+<section class="wrap info">
+    <h2>Comment fonctionne le calcul ?</h2>
+    <p>
+        Ce calculateur estime la zakat en DZD à partir de vos montants saisis. Il calcule d’abord le
+        <strong>Nisab</strong> (seuil) selon la méthode choisie (<strong>or</strong> ou <strong>argent</strong>) :
+        <strong>Nisab = prix/gramme × grammes</strong>.
+    </p>
+
+    <h3>1) Total des actifs</h3>
+    <p>
+        Le total des actifs additionne l’épargne/cash, le stock (si applicable), les créances (argent dû),
+        ainsi que la valeur de l’or et/ou de l’argent détenus (grammes × prix/gramme).
+    </p>
+
+    <h3>2) Total zakatable</h3>
+    <p>
+        Le <strong>total zakatable</strong> correspond au total des actifs <strong>moins</strong> les dettes à court terme
+        que vous renseignez. Le résultat est plafonné à zéro si la déduction dépasse les actifs.
+    </p>
+
+    <h3>3) Zakat due</h3>
+    <p>
+        Si le total zakatable est <strong>inférieur</strong> au Nisab, l’outil affiche “zakat non due”.
+        S’il est <strong>supérieur ou égal</strong>, la zakat est estimée à <strong>(total zakatable × taux)</strong>.
+    </p>
+
+    <h2>Exemples rapides</h2>
+    <ul>
+        <li><strong>Épargne seule :</strong> cash 500 000 DZD, dettes 0 → comparez au Nisab pour savoir si la zakat est due.</li>
+        <li><strong>Épargne + dettes :</strong> cash 800 000 DZD, dettes 200 000 DZD → total zakatable = 600 000 DZD.</li>
+        <li><strong>Avec or :</strong> cash + (or en grammes × prix/gramme) → l’outil détaille la valeur ajoutée.</li>
+    </ul>
+
+    <p class="small">
+        ⚠️ Outil informatif. Les règles exactes peuvent varier selon la nature des biens, l’exigibilité des dettes,
+        et l’avis suivi. Pour les cas complexes, demandez un avis qualifié.
+    </p>
+</section>
+
+<section class="wrap info">
+    <h2>FAQ — Zakat en DZD</h2>
+
+    <h3>Le calcul est-il officiel ?</h3>
+    <p>Non. C’est une estimation basée sur vos saisies et un modèle simple.</p>
+
+    <h3>Nisab or ou Nisab argent : lequel choisir ?</h3>
+    <p>L’outil propose les deux méthodes ; le seuil dépend du prix du gramme et du standard utilisé.</p>
+
+    <h3>Pourquoi entrer le prix du gramme ?</h3>
+    <p>Parce que les prix varient. Vous pouvez utiliser votre référence (marché, bijouterie, etc.).</p>
+
+    <h3>Les dettes sont-elles déduites ?</h3>
+    <p>Oui, les dettes à court terme saisies diminuent le total zakatable affiché.</p>
+</section>
+
+
 <footer class="wrap foot">
-    <small>© <span id="year"></span> aljiz.com — Calcul Zakat DZD</small>
+    <small>
+        © <span id="year"></span> aljiz.com —
+        <strong>Outil informatif</strong> : résultats fournis à titre indicatif, sans garantie.
+        Vérifiez toujours avec des sources officielles / professionnelles si nécessaire.
+        <br />
+        <strong>Confidentialité :</strong> le calcul s’effectue localement dans votre navigateur — aucune donnée n’est envoyée à un serveur.
+    </small>
+
+    <nav class="small" aria-label="Navigation">
+        <a href="../">Accueil</a> ·
+        <a href="../salaire-net-algerie/">Salaire net Algérie</a> ·
+        <a href="../visa-france-cout/">Coût visa France/Schengen</a> ·
+        <a href="../calcul-zakat-dzd/">Calcul Zakat DZD</a>
+    </nav>
 </footer>
+
 
 <script src="./app.js"></script>
 </body>

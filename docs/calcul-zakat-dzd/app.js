@@ -6,7 +6,7 @@
 
   const fields = [
     "cashDzd","inventoryDzd","receivablesDzd","debtsDueDzd",
-    "nisabMethod","goldPricePerGramDzd","silverPricePerGramDzd",
+    "NisabMethod","goldPricePerGramDzd","silverPricePerGramDzd",
     "goldNisabGrams","silverNisabGrams",
     "goldGrams","silverGrams",
     "zakatRatePct"
@@ -35,7 +35,7 @@
   };
 
   const setMethodVisibility = () => {
-    const method = $("nisabMethod").value;
+    const method = $("NisabMethod").value;
     $("goldPriceWrap").style.display = method === "gold" ? "block" : "none";
     $("silverPriceWrap").style.display = method === "silver" ? "block" : "none";
   };
@@ -71,7 +71,7 @@
     const receivables = readNum("receivablesDzd");
     const debts = readNum("debtsDueDzd");
 
-    const method = $("nisabMethod").value;
+    const method = $("NisabMethod").value;
     const goldPrice = readNum("goldPricePerGramDzd");
     const silverPrice = readNum("silverPricePerGramDzd");
 
@@ -90,24 +90,24 @@
     const assets = cash + inventory + receivables + goldValue + silverValue;
     const zakatable = Math.max(0, assets - debts);
 
-    let nisab = 0;
+    let Nisab = 0;
     let missingPrice = false;
 
     if (method === "gold") {
-      nisab = goldPrice * goldNisabG;
+      Nisab = goldPrice * goldNisabG;
       missingPrice = goldPrice <= 0;
     } else {
-      nisab = silverPrice * silverNisabG;
+      Nisab = silverPrice * silverNisabG;
       missingPrice = silverPrice <= 0;
     }
 
-    const isDue = !missingPrice && zakatable >= nisab && nisab > 0;
+    const isDue = !missingPrice && zakatable >= Nisab && Nisab > 0;
     const zakatDue = isDue ? (zakatable * zakatRate) : 0;
 
     // Render summary
     $("assetsDzd").textContent = formatMoney(assets);
     $("zakatableDzd").textContent = formatMoney(zakatable);
-    $("nisabDzd").textContent = missingPrice ? "Prix manquant" : formatMoney(nisab);
+    $("NisabDzd").textContent = missingPrice ? "Prix manquant" : formatMoney(Nisab);
 
     $("bCash").textContent = formatMoney(cash);
     $("bInventory").textContent = formatMoney(inventory);
@@ -127,12 +127,12 @@
     if (missingPrice) {
       badge.textContent = "Action requise";
       badge.style.background = "rgba(255, 196, 70, .18)";
-      statusText.textContent = `Entrez le prix ${method === "gold" ? "de l’or" : "de l’argent"} par gramme pour calculer le nissab.`;
-      noteBox.textContent = "Astuce : vous pouvez modifier le nissab (grammes) et le taux si votre méthode diffère.";
+      statusText.textContent = `Entrez le prix ${method === "gold" ? "de l’or" : "de l’argent"} par gramme pour calculer le Nisab.`;
+      noteBox.textContent = "Astuce : vous pouvez modifier le Nisab (grammes) et le taux si votre méthode diffère.";
       return;
     }
 
-    if (nisab <= 0) {
+    if (Nisab <= 0) {
       badge.textContent = "Incomplet";
       badge.style.background = "rgba(255, 196, 70, .18)";
       statusText.textContent = "Entrez un prix par gramme et vérifiez vos saisies.";
@@ -142,12 +142,12 @@
     if (isDue) {
       badge.textContent = "Zakat due";
       badge.style.background = "rgba(80, 220, 150, .18)";
-      statusText.textContent = "Votre total zakatable atteint ou dépasse le nissab.";
+      statusText.textContent = "Votre total zakatable atteint ou dépasse le Nisab.";
       if (debts > assets) noteBox.textContent = "Note : vos dettes dépassent vos actifs, le total zakatable est ramené à 0.";
     } else {
       badge.textContent = "Non due";
       badge.style.background = "rgba(255, 196, 70, .10)";
-      statusText.textContent = "Votre total zakatable est en dessous du nissab.";
+      statusText.textContent = "Votre total zakatable est en dessous du Nisab.";
       if (debts > assets) noteBox.textContent = "Note : vos dettes dépassent vos actifs, le total zakatable est ramené à 0.";
     }
   };
@@ -160,15 +160,15 @@
 
   const copyResult = async () => {
     const zakat = $("zakatDue").textContent;
-    const nisab = $("nisabDzd").textContent;
+    const Nisab = $("NisabDzd").textContent;
     const zakatable = $("zakatableDzd").textContent;
-    const method = $("nisabMethod").value === "gold" ? "or" : "argent";
+    const method = $("NisabMethod").value === "gold" ? "or" : "argent";
     const url = updateShareUrl(false);
 
     const text =
 `Calcul Zakat (DZD) — aljiz.com
-- Méthode nissab: ${method}
-- Nissab: ${nisab}
+- Méthode Nisab: ${method}
+- Nisab: ${Nisab}
 - Total zakatable: ${zakatable}
 - Zakat due: ${zakat}
 - Lien: ${url}
@@ -179,7 +179,7 @@
 
   const resetAll = () => {
     for (const id of fields) {
-      if (id === "nisabMethod") setVal(id, "gold");
+      if (id === "NisabMethod") setVal(id, "gold");
       else if (id === "goldNisabGrams") setVal(id, "85");
       else if (id === "silverNisabGrams") setVal(id, "595");
       else if (id === "zakatRatePct") setVal(id, "2.5");

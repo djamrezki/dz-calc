@@ -3,8 +3,11 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta property="og:url" content="https://aljiz.com/salaire-net-algerie/" />
+    <meta name="twitter:card" content="summary" />
 
-    <title>Calcul salaire net Algérie (DZD) — estimation brut → net</title>
+
+    <title>Calcul salaire net Algérie — Brut → Net (DZD) | Estimation rapide</title>
     <meta name="description" content="Calculateur de salaire net en Algérie (DZD) : estimation du net à partir du brut, avec taux CNAS/charges et impôt (optionnel). 100% dans le navigateur." />
     <meta name="robots" content="index,follow" />
     <link rel="canonical" href="https://aljiz.com/salaire-net-algerie/" />
@@ -23,22 +26,56 @@
             "mainEntity":[
                 {
                     "@type":"Question",
-                    "name":"Ce calcul de salaire net est-il officiel ?",
-                    "acceptedAnswer":{"@type":"Answer","text":"Non. Cet outil fournit une estimation basée sur vos saisies et des hypothèses simples. Les règles (taux, bases, arrondis, exemptions) peuvent varier."}
+                    "name":"Comment calculer le salaire net en Algérie à partir du brut ?",
+                    "acceptedAnswer":{
+                        "@type":"Answer",
+                        "text":"Le salaire net est estimé à partir du brut en déduisant les charges salariales, l’impôt (si activé) et les autres retenues. La formule utilisée est : net = (brut + primes) − charges − impôt − autres déductions."
+                    }
                 },
                 {
                     "@type":"Question",
-                    "name":"Quels paramètres dois-je saisir pour une estimation correcte ?",
-                    "acceptedAnswer":{"@type":"Answer","text":"Saisissez votre salaire brut, puis votre taux de retenue salarié (charges/assurance) si vous le connaissez, et choisissez le mode d’impôt (aucun ou taux fixe)."}
+                    "name":"Le calcul du salaire net est-il officiel (IRG, CNAS) ?",
+                    "acceptedAnswer":{
+                        "@type":"Answer",
+                        "text":"Non. Cet outil fournit une estimation basée sur vos paramètres. Les taux officiels, règles fiscales, plafonds et exemptions peuvent varier selon la situation et la réglementation en vigueur."
+                    }
+                },
+                {
+                    "@type":"Question",
+                    "name":"Quels paramètres dois-je renseigner pour une estimation réaliste ?",
+                    "acceptedAnswer":{
+                        "@type":"Answer",
+                        "text":"Pour une estimation proche de la réalité, saisissez votre salaire brut, vos primes éventuelles, votre taux de retenue salarié si vous le connaissez, et choisissez un mode d’impôt adapté."
+                    }
+                },
+                {
+                    "@type":"Question",
+                    "name":"Les primes et indemnités sont-elles incluses dans le calcul ?",
+                    "acceptedAnswer":{
+                        "@type":"Answer",
+                        "text":"Oui. Les primes et indemnités que vous saisissez sont ajoutées au brut pour cette estimation. Selon votre situation réelle, certaines primes peuvent être traitées différemment."
+                    }
+                },
+                {
+                    "@type":"Question",
+                    "name":"Pourquoi le salaire net estimé peut-il différer de la fiche de paie ?",
+                    "acceptedAnswer":{
+                        "@type":"Answer",
+                        "text":"Des écarts peuvent apparaître à cause des arrondis, des plafonds, des exonérations, des avantages spécifiques ou de règles internes propres à l’employeur."
+                    }
                 },
                 {
                     "@type":"Question",
                     "name":"Mes données sont-elles envoyées à un serveur ?",
-                    "acceptedAnswer":{"@type":"Answer","text":"Non. Les calculs s’effectuent entièrement dans votre navigateur. Aucune donnée n’est transmise."}
+                    "acceptedAnswer":{
+                        "@type":"Answer",
+                        "text":"Non. Tous les calculs sont effectués localement dans votre navigateur. Aucune donnée n’est envoyée ou stockée sur un serveur."
+                    }
                 }
             ]
         }
     </script>
+
 </head>
 
 <body>
@@ -156,21 +193,71 @@
 </main>
 
 <section class="wrap info">
-    <h2>Comment ça marche ?</h2>
+    <h2>Comment estimer un salaire net en Algérie ?</h2>
     <p>
-        Le calcul applique une formule simple :
+        Ce calculateur estime le <strong>salaire net mensuel</strong> à partir du brut en appliquant une formule simple :
         <strong>net = (brut + primes) − charges − impôt − autres déductions</strong>.
-        Si vous choisissez “taux fixe”, l’impôt est calculé sur la base :
-        <strong>(brut + primes − charges)</strong>.
+        Les champs sont modifiables pour coller à votre situation (secteur, retenues, règles internes).
     </p>
+
+    <h3>1) Brut + primes</h3>
+    <p>
+        Les primes/indemnités saisies sont ajoutées au brut pour cette estimation. Si, dans votre cas, certaines primes
+        ne sont pas traitées comme du salaire, adaptez vos entrées.
+    </p>
+
+    <h3>2) Charges salariales</h3>
+    <p>
+        Si vous connaissez votre taux de retenue salarié, indiquez-le. Sinon, laissez vide : l’outil affichera une estimation
+        simplifiée sans charges.
+    </p>
+
+    <h3>3) Impôt (optionnel)</h3>
+    <p>
+        Le mode “taux fixe” applique un pourcentage sur la <strong>base imposable</strong> :
+        <strong>(brut + primes − charges)</strong>. Ce n’est pas un barème officiel ; c’est une approximation configurable.
+    </p>
+
+    <h2>Exemples rapides</h2>
+    <ul>
+        <li><strong>Brut 120 000 DZD</strong>, charges 9% → net estimé = brut − charges (si impôt désactivé).</li>
+        <li><strong>Brut 180 000 DZD</strong>, charges 9%, impôt 10% → l’impôt s’applique sur (brut − charges).</li>
+        <li><strong>Brut + primes</strong> : ajoutez vos primes pour voir leur impact sur le net.</li>
+    </ul>
+
+    <h2>FAQ — Salaire net Algérie</h2>
+    <h3>Le calcul est-il officiel ?</h3>
+    <p>Non. C’est une estimation basée sur vos paramètres. Les taux, bases et arrondis peuvent varier.</p>
+
+    <h3>Que dois-je saisir pour être proche de ma fiche de paie ?</h3>
+    <p>Votre brut, votre taux de retenue salarié (si connu) et, éventuellement, un taux d’impôt approximatif.</p>
+
+    <h3>Mes données sont-elles envoyées ?</h3>
+    <p>Non. Tout se fait dans votre navigateur.</p>
+
     <p class="small">
-        Conseil : pour une estimation réaliste, utilisez les taux visibles sur une fiche de paie récente ou vos paramètres habituels.
+        ⚠️ Estimation uniquement. Vérifiez toujours avec votre fiche de paie et/ou une source officielle.
     </p>
 </section>
 
+
 <footer class="wrap foot">
-    <small>© <span id="year"></span> aljiz.com — Salaire net (estimation)</small>
+    <small>
+        © <span id="year"></span> aljiz.com —
+        <strong>Outil informatif</strong> : résultats fournis à titre indicatif, sans garantie.
+        Vérifiez toujours avec des sources officielles / professionnelles si nécessaire.
+        <br />
+        <strong>Confidentialité :</strong> le calcul s’effectue localement dans votre navigateur — aucune donnée n’est envoyée à un serveur.
+    </small>
+
+    <nav class="small" aria-label="Navigation">
+        <a href="../">Accueil</a> ·
+        <a href="../salaire-net-algerie/">Salaire net Algérie</a> ·
+        <a href="../visa-france-cout/">Coût visa France/Schengen</a> ·
+        <a href="../calcul-zakat-dzd/">Calcul Zakat DZD</a>
+    </nav>
 </footer>
+
 
 <script src="./app.js"></script>
 </body>
