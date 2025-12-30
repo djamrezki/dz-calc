@@ -171,3 +171,12 @@ h3{margin:0 0 10px 0; font-size:15px; color:var(--muted)}
 }
 
 .foot{padding-top:6px; padding-bottom:22px; color:var(--muted)}
+
+.note.no-ads {
+    font-size: 0.9rem;
+    color: #cfd6e4;
+    background: rgba(255,255,255,0.03);
+    border-left: 3px solid #6aa9ff;
+    padding: 0.75rem 0.9rem;
+    border-radius: 6px;
+}
