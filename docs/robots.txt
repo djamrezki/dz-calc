@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://aljiz.com/dz-calc/sitemap.xml
+Sitemap: https://aljiz.com/sitemap.xml
