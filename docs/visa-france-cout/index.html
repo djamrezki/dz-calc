@@ -10,7 +10,6 @@
     <meta property="og:url" content="https://aljiz.com/visa-france-cout/" />
     <meta name="twitter:card" content="summary" />
 
-
     <title>Coût visa France / Schengen depuis l’Algérie — estimation (EUR/DZD)</title>
     <meta name="description" content="Estimez le coût total d’une demande de visa France/Schengen depuis l’Algérie : frais officiels (éditables), frais centre, assurance, documents, transport, extras. 100% navigateur." />
     <meta name="robots" content="index,follow" />
@@ -22,9 +21,9 @@
     <meta name="theme-color" content="#0b1220" />
 
     <link rel="stylesheet" href="./styles.css" />
-
     <link rel="apple-touch-icon" href="/docs/assets/apple-touch-icon-180.png" sizes="180x180" />
 
+    <!-- keep your FAQ JSON-LD unchanged -->
     <script type="application/ld+json">
         {
             "@context":"https://schema.org",
@@ -81,7 +80,6 @@
             ]
         }
     </script>
-
 </head>
 
 <body>
@@ -102,6 +100,7 @@
     <section class="card">
         <h2>Votre demande</h2>
 
+        <!-- Keep required items minimal and always visible -->
         <div class="form-grid">
             <label class="field">
                 <span>Type de visa</span>
@@ -109,7 +108,7 @@
                     <option value="schengen_short_stay">Schengen court séjour</option>
                     <option value="long_stay">Long séjour (indicatif)</option>
                 </select>
-                <small class="hint">Les règles/frais peuvent varier. Gardez les montants éditables.</small>
+                <small class="hint">Les règles/frais peuvent varier. Montants éditables.</small>
             </label>
 
             <label class="field">
@@ -128,58 +127,80 @@
                     <option value="DZD">DZD</option>
                     <option value="EUR">EUR</option>
                 </select>
-                <small class="hint">Le calcul interne se fait en DZD, avec conversion via le taux.</small>
+                <small class="hint">Conversion via le taux EUR→DZD.</small>
             </label>
 
             <label class="field">
                 <span>Taux EUR → DZD</span>
                 <input id="eurToDzdRate" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Ex: 150" />
-                <small class="hint">Utilisé pour convertir tous les montants en EUR.</small>
+                <div class="rate-row">
+                    <small class="hint" id="rateHint">Valeur modifiable (banque/change/référence personnelle).</small>
+                    <button id="refreshRateBtn" class="link-btn" type="button">Recharger</button>
+                </div>
             </label>
+
         </div>
 
-        <div class="divider"></div>
 
-        <h2>Frais (éditables)</h2>
 
-        <div class="form-grid">
-            <label class="field">
-                <span>Frais officiels (EUR)</span>
-                <input id="visaFeeEur" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Ex: 80" />
-                <small class="hint">Suggestion auto selon catégorie (modifiable).</small>
-            </label>
+        <!-- Progressive disclosure panels -->
+        <details class="panel" open>
+            <summary>Frais visa & centre <em class="unit" data-unit="insuranceCostDzd">DZD</em></summary>
+            <div class="form-grid">
+                <label class="field">
+                    <span>Frais officiels <em class="unit" data-unit="insuranceCostDzd">DZD</em></span>
+                    <input id="visaFeeEur" type="number" inputmode="decimal" min="0" step="0.01" placeholder="Ex: 80" />
+                    <small class="hint">Suggestion auto selon catégorie (modifiable).</small>
+                </label>
 
-            <label class="field">
-                <span>Frais centre / service (EUR) (optionnel)</span>
-                <input id="serviceFeeEur" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0" />
-            </label>
+                <label class="field">
+                    <span>Frais centre / service <em class="unit" data-unit="insuranceCostDzd">DZD</em></span>
+                    <input id="serviceFeeEur" type="number" inputmode="decimal" min="0" step="0.01" placeholder="0" />
+                    <small class="hint">Optionnel — laissez vide si inconnu.</small>
+                </label>
+            </div>
+        </details>
 
-            <label class="field">
-                <span>Assurance voyage (DZD) (optionnel)</span>
-                <input id="insuranceCostDzd" type="number" inputmode="decimal" min="0" placeholder="0" />
-            </label>
-
-            <label class="field">
-                <span>Documents (traductions, légalisation) (DZD) (optionnel)</span>
-                <input id="documentsCostDzd" type="number" inputmode="decimal" min="0" placeholder="0" />
-            </label>
-
-            <label class="field">
-                <span>Transport (DZD) (optionnel)</span>
-                <input id="transportCostDzd" type="number" inputmode="decimal" min="0" placeholder="0" />
-            </label>
-
-            <label class="field">
-                <span>Extras (photos, photocopies, SMS…) (DZD) (optionnel)</span>
-                <input id="extrasCostDzd" type="number" inputmode="decimal" min="0" placeholder="0" />
-            </label>
+        <!-- Presets -->
+        <div class="preset-row">
+            <button id="presetMinimal" class="chip" type="button">Essentiel</button>
+            <button id="presetTypical" class="chip" type="button">Estimation courante</button>
+            <small class="hint">Choisissez une base, puis ajustez si besoin.</small>
         </div>
 
-        <div class="actions">
-            <button id="resetBtn" class="btn secondary" type="button">Réinitialiser</button>
-            <button id="copyBtn" class="btn" type="button">Copier le résultat</button>
-            <button id="shareBtn" class="btn secondary" type="button">Lien partageable</button>
-        </div>
+        <details class="panel" id="extrasPanel">
+            <summary>Dépenses additionnelles <em class="unit" data-unit="insuranceCostDzd">DZD</em></summary>
+            <div class="form-grid">
+                <label class="field">
+                    <span>Assurance <em class="unit" data-unit="insuranceCostDzd">DZD</em></span>
+                    <input id="insuranceCostDzd" type="number" inputmode="decimal" min="0" placeholder="0" />
+                </label>
+
+                <label class="field">
+                    <span>Documents (traductions, légalisation) <em class="unit" data-unit="insuranceCostDzd">DZD</em></span>
+                    <input id="documentsCostDzd" type="number" inputmode="decimal" min="0" placeholder="0" />
+                </label>
+
+                <label class="field">
+                    <span>Transport <em class="unit" data-unit="insuranceCostDzd">DZD</em></span>
+                    <input id="transportCostDzd" type="number" inputmode="decimal" min="0" placeholder="0" />
+                </label>
+
+                <label class="field">
+                    <span>Extras (photos, photocopies, SMS…) <em class="unit" data-unit="insuranceCostDzd">DZD</em></span>
+                    <input id="extrasCostDzd" type="number" inputmode="decimal" min="0" placeholder="0" />
+                </label>
+            </div>
+        </details>
+
+        <details class="panel subtle">
+            <summary>Actions</summary>
+            <div class="actions">
+                <button id="resetBtn" class="btn secondary" type="button">Réinitialiser</button>
+                <button id="copyBtn" class="btn" type="button">Copier le résultat</button>
+                <button id="shareBtn" class="btn secondary" type="button">Lien partageable</button>
+            </div>
+        </details>
 
         <p class="disclaimer">
             ⚠️ <strong>Estimation uniquement.</strong> Les frais officiels, frais de centre et options peuvent changer.
@@ -213,7 +234,7 @@
             <div class="row total"><span>Total</span><strong id="bTotal">—</strong></div>
         </div>
 
-        <!-- AdSense: Salary - result card -->
+        <!-- AdSense: keep the slot -->
         <div class="ad-slot" aria-label="Publicité">
             <ins class="adsbygoogle"
                  style="display:block"
@@ -226,11 +247,11 @@
             (adsbygoogle = window.adsbygoogle || []);
         </script>
 
-
         <div class="note" id="noteBox"></div>
     </aside>
 </main>
 
+<!-- Keep your info/FAQ section unchanged if you want -->
 <section class="wrap info">
     <h2>Comment estimer le coût total d’un visa France / Schengen depuis l’Algérie ?</h2>
     <p>
@@ -267,7 +288,6 @@
     </p>
 </section>
 
-
 <footer class="wrap foot">
     <small>
         © <span id="year"></span> aljiz.com —
@@ -284,7 +304,6 @@
         <a href="../calcul-zakat-dzd/">Calcul Zakat DZD</a>
     </nav>
 </footer>
-
 
 <script src="./app.js"></script>
 </body>
