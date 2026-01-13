@@ -25,4 +25,16 @@
         <changefreq>monthly</changefreq>
     </url>
 
+    <url>
+        <loc>https://aljiz.com/privacy-policy.html</loc>
+        <priority>0.30</priority>
+        <changefreq>yearly</changefreq>
+    </url>
+
+    <url>
+        <loc>https://aljiz.com/legal.html</loc>
+        <priority>0.30</priority>
+        <changefreq>yearly</changefreq>
+    </url>
+
 </urlset>
