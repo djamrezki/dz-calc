@@ -1,4 +1,7 @@
+User-agent: AdsBot-Google
+Disallow:
+
 User-agent: *
-Allow: /
+Disallow:
 
 Sitemap: https://aljiz.com/sitemap.xml
