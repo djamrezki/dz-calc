@@ -1,0 +1,74 @@
+/* Aljiz – Minimal cookie banner (harmonized) */
+
+.cookie-banner {
+  position: fixed;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  z-index: 2000;
+  display: none;
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: rgba(17,26,46,.78);
+  backdrop-filter: blur(10px);
+  box-shadow: var(--shadow);
+
+  padding: 14px 14px;
+}
+
+.cookie-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.cookie-text {
+  color: var(--muted);
+  font-size: 13px;
+  max-width: 80ch;
+}
+
+.cookie-actions {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.cookie-btn {
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(156,199,255,.10);
+  color: var(--text);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.cookie-btn:hover {
+  background: rgba(156,199,255,.18);
+}
+
+.cookie-btn.secondary {
+  background: rgba(0,0,0,.12);
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.cookie-btn.secondary:hover {
+  background: rgba(0,0,0,.18);
+  color: var(--text);
+}
+
+.cookie-link {
+  color: var(--link);
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.cookie-link:hover {
+  text-decoration: underline;
+}

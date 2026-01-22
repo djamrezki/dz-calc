@@ -1,0 +1,193 @@
+You are refactoring Djoot backend code to the new DjootServiceV2 + DjootFetch/DjootWrite + AbstractDjootEntityMapper pattern.
+
+Goal:
+Refactor Fee repository + service + mapper to use:
+- com.djoot.lawyer.backend.service.AbstractDjootServiceImpl (generic base service)
+- com.djoot.lawyer.backend.repository.core.LifeCycleAwareRepository
+- com.djoot.lawyer.backend.repository.core.DjootJpaRepository
+- com.djoot.lawyer.backend.repository.core.DetailsAwareRepository
+- FeeMapper updated to extend AbstractDjootEntityMapper and implement:
+    Fee toPojo(FeeEntity entity, DjootFetch fetch)
+
+Scope:
+- Amend com.djoot.lawyer.backend.repository.fee.FeeRepository
+- Amend com.djoot.lawyer.backend.service.FeeServiceImpl
+- Amend com.djoot.lawyer.backend.mapper.FeeMapper to support DjootFetch + summary/full + lifecycle modes
+- Add tests with Object Mother and fixture/builder
+- Do not change business behavior, only align patterns and reduce redundancy.
+- Keep imperative style: log before throw, no chained Optionals.
+- Ensure paging remains light: SUMMARY must not map heavy collections.
+- Lifecycle rules:
+  - Normal savePojo must NEVER write lifecycle transitions.
+  - Lifecycle updates are only via updateLifeCycleState(s) using APPEND_ONLY
+    (allow INIT_ONLY only if Fee explicitly supports it).
+- Avoid Spring Data 3.5 deprecated Specification.where(...) usage.
+
+Special domain note (Fee):
+- Fee is polymorphic (StandardFee, RetainerFee, ContingencyFee, SubscriptionFee, etc.).
+- Mapping must preserve concrete subtype fields.
+- Paging must be lightweight:
+  - SUMMARY must not include large relationships/collections (invoice links, ledger transactions, allocations, etc.)
+  - FULL is allowed only for single-item fetch or explicit details fetch.
+- Fee is often referenced by Customer/Case/Activity:
+  keep these references light in SUMMARY (ids/labels only per your current rules).
+
+Repository requirements:
+FeeRepository must:
+1) Extend DjootJpaRepository<FeeEntity, Long>
+2) Extend LifeCycleAwareRepository<FeeEntity, Long> to support:
+   - Optional<FeeEntity> findWithLifecycleById(Long id)
+   - Page<FeeEntity> findAllWithLifecycle(Specification<FeeEntity> spec, Pageable pageable)
+   - List<FeeEntity> findWithLifecycleByIdIn(List<Long> ids)
+3) Extend DetailsAwareRepository<FeeEntity, Long> to support:
+   - Optional<FeeEntity> findWithDetailsById(Long id)
+   - Optional<FeeEntity> findWithDetailsAndLifecycleById(Long id)
+4) Keep existing custom queries (by customer/case/activity, fee type, due recurring fees, etc.) but align them with the fetch contract:
+   - page listing must stay light (no details graph)
+   - lifecycle FULL must fetch transitions via EntityGraph
+   - details FULL must fetch canonical Fee details graph
+
+Implementation notes:
+- Prefer @EntityGraph(attributePaths = {...}) where you need lifecycleTransitions and/or details.
+- If you have specialized queries for recurring fees (subscription/retainer due), keep them unchanged in behavior.
+- Ensure any query used for paging does not pull invoice/ledger graphs.
+
+Service requirements:
+FeeServiceImpl must:
+- Extend AbstractDjootServiceImpl<Fee, FeeEntity, FeeFilter, FeeRepository, FeeMapper>
+  (adapt type params to match your base class signature)
+- Implement/override only Fee-specific parts:
+  - DomainLevel getDomainLevel() returns DomainLevel.FEE
+  - Class<?> getPojoClass() returns Fee.class
+  - Specification<FeeEntity> buildSpecification(FeeFilter filter) (delegate to FeeSpecification)
+  - FeeEntity toNewEntity(Fee pojo)
+  - void patchEntityForUpdate(Fee pojo, FeeEntity entity)
+  - Any domain-specific find methods that already exist (keep signatures unchanged):
+    - findFeesForCustomer / findFeesForCase / findFeesForActivity
+    - findAllRecurringFeesDue (subscription + retainer only) if present
+    - any fee-type-specific lookups used by FeeManager / InvoiceManager
+
+- Use base service implementation for:
+  - findPojos(pageable, filter, fetch)
+  - countPojos(filter)
+  - findPojo(id, fetch)
+  - findPojos(ids, fetch)
+  - updateLifeCycleState(s)
+
+Fetch semantics to enforce in service:
+- Default fetch is DjootFetch.summaryWithCurrentLifeCycle() if null.
+
+findPojos(pageable,...):
+- if fetch.lifeCycle == FULL → repository.findAllWithLifecycle(spec, pageable)
+- else → repository.findAll(spec, pageable)
+- map via mapper.toPojo(entity, effectiveFetch)
+
+findPojo(id, fetch):
+- SUMMARY:
+    - FULL lifecycle → repo.findWithLifecycleById(id)
+    - else → repo.findById(id)
+- FULL:
+    - FULL lifecycle → repo.findWithDetailsAndLifecycleById(id)
+    - else → repo.findWithDetailsById(id)
+
+savePojo(pojo, write):
+- forbid write.lifeCycleWrite != NONE
+- create:
+    mapper.toNewEntity(pojo) → save → mapper.toPojo(saved, DjootFetch.summary())
+- update:
+    load with repo.findById (imperative, log-before-throw)
+    patchEntityForUpdate(pojo, entity)
+    save
+    mapper.toPojo(saved, DjootFetch.summary())
+
+updateLifeCycleState(pojo, write):
+- require pojo.id and pojo.lifeCycle.currentTransition
+- require write.lifeCycleWrite == APPEND_ONLY
+- fetch entity with lifecycle via repo.findWithLifecycleById
+- mapper.appendLifecycleOnly(pojo, entity)
+- save
+- return mapper.toPojo(saved, DjootFetch.fullWithLifeCycleHistory())
+
+Additional constraints:
+- Do not load large graphs in paging.
+- FeeMapper must decide summary vs full mapping based on DjootFetch.fetchMode.
+- Mapper must honor lifecycle fetch mode:
+  - NONE: do not map lifecycle
+  - CURRENT_ONLY: map only the last transition (current state)
+  - FULL: map full transition list/history
+- Repository fetch must match mapper promises: if service asks for FULL lifecycle, repository must fetch transitions.
+- Keep logging verbose and imperative.
+
+Mapper requirements (FeeMapper):
+- FeeMapper extends AbstractDjootEntityMapper<Fee, FeeEntity>
+- Implement:
+  - Fee toPojo(FeeEntity entity, DjootFetch fetch)
+  - FeeEntity toNewEntity(Fee pojo) (must create correct FeeEntity subtype)
+  - void patchEntityForUpdate(Fee pojo, FeeEntity entity) (must handle subtype-safe patching)
+  - void appendLifecycleOnly(Fee pojo, FeeEntity entity)
+- Summary mapping MUST:
+  - include core scalar fields common to all fees: id, feeType, validFrom/validTo, amount(s), currency, status, nextBillingDate (if small scalar)
+  - include only lightweight references for scope: customerId/caseId/activityId (and possibly display labels if already lightweight)
+  - exclude heavy graphs: invoice links, ledger transactions, allocations, history lists, etc.
+- Full mapping MAY include:
+  - subtype-specific fields (retainer balances, frequency, rateAmount/rateType, subscription pool, contingency %/cap, etc.)
+  - but avoid N+1; do not iterate lazy collections outside a transaction
+- If FeeEntity uses inheritance in JPA:
+  - ensure mapper uses instanceof checks (imperative) rather than chained Optionals/streams
+  - log and throw on unexpected subtype mismatch
+
+Deliverables:
+- Updated FeeRepository with correct interface inheritance and methods.
+- Updated FeeServiceImpl that uses AbstractDjootServiceImpl and removes redundant code.
+- Updated FeeMapper to support DjootFetch + summary/full + lifecycle mapping modes and Fee subtype mapping.
+- Ensure compilation (imports, generics, overridden methods).
+- Keep existing public service interface unchanged (FeeService).
+
+Tests (must add):
+- Create com.djoot.lawyer.backend.service.FeeServiceImplTest
+
+Test cases to cover (minimum):
+1) savePojo forbids lifecycle writes
+   - savePojo(fee, DjootWrite.appendLifeCycle()) throws IllegalArgumentException (log before throw)
+2) mapper preserves subtype fields
+   - saving/updating each supported subtype keeps subtype-specific fields intact
+3) findPojo respects fetch:
+   - summary() returns minimal mapping (no heavy collections)
+   - full() returns details mapping (subtype fields present)
+   - fullWithLifeCycleHistory() returns details + lifecycle history
+4) findPojos(pageable, ...) stays light in SUMMARY
+   - returned fees do not include heavy graphs
+5) updateLifeCycleState appends transitions (append-only)
+   - lifecycleTransitions size increases
+   - history preserved
+6) (optional) recurring fee query behavior unchanged (subscription + retainer only)
+
+Object Mother & Builder enrichment:
+- Package: com.djoot.lawyer.backend.testutil.mother
+  - FeeMother (with helpers per subtype)
+  - FeeEntityMother
+- Package: com.djoot.lawyer.backend.testutil.builder
+  - StandardFeeBuilder / RetainerFeeBuilder / SubscriptionFeeBuilder / ContingencyFeeBuilder (if you already use per-type builders)
+  - FeeEntityBuilder (and/or per-entity-subtype builders)
+  - (optional) LifeCycleTransitionBuilder helper
+
+Mother rules:
+- Deterministic defaults
+- aStandardFee(), aRetainerFeeGeneral(), aRetainerFeeEvergreen(), aRetainerFeeSpecial(), aSubscriptionFee(), aContingencyFee()
+- aFeeWithId(id)
+- aFeeForCustomer(customerId), aFeeForCase(caseId), aFeeForActivity(activityId)
+- aFeeEntityWithLifecycle(...), aFeeEntityWithDetails(...)
+
+Builder rules:
+- Fluent
+- Easy override of ids, scope linkage, amounts, currency, frequency, subtype fields, and lifecycle transitions
+
+Implementation constraints recap:
+- No business changes
+- Imperative style
+- No chained Optionals
+- Paging must stay light
+- Lifecycle written only via lifecycle-only methods
+- Avoid deprecated Specification.where(...)
+
+Proceed to implement all deliverables.

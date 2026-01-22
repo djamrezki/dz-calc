@@ -146,17 +146,9 @@
         }
     </style>
 
+    <link rel="stylesheet" href="./assets/cookies.css" />
+
     <!-- FAQ schema -->
-
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z8W11MZTF8"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-Z8W11MZTF8');
-    </script>
 
     <script type="application/ld+json">
         {
@@ -308,8 +300,10 @@
         <div class="small">
             <a href="./privacy-policy.html">Privacy Policy</a> ·
             <a href="./legal.html">Legal Notice</a>
+            <a href="#" id="cookiePrefs">Cookies</a>
         </div>
     </footer>
+
 
 
 </div>
@@ -325,6 +319,27 @@
       });
     }
 </script>
+
+<!-- Cookie consent banner -->
+<div id="cookieBanner" class="cookie-banner" role="dialog" aria-live="polite">
+    <div class="cookie-row">
+        <div class="cookie-text">
+            Nous utilisons des cookies <strong>uniquement</strong> pour mesurer l’audience
+            (Google Analytics) et améliorer le site.
+            <a class="cookie-link" href="./privacy-policy.html">En savoir plus</a>.
+        </div>
+        <div class="cookie-actions">
+            <button id="cookieRefuse" class="cookie-btn secondary" type="button">
+                Refuser
+            </button>
+            <button id="cookieAccept" class="cookie-btn" type="button">
+                Accepter
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="./assets/cookies.js"></script>
 
 
 </body>
