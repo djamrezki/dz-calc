@@ -1,0 +1,84 @@
+We now want to verify and test the CALCULATION LOGIC (correctness) of the 3 calculators, not just page load.
+
+Local server:
+- Run: `cd docs && python3 -m http.server 8000`
+- Base URL: http://localhost:8000
+
+Calculators + logic source:
+- Salary net: /salaire-net-algerie/ (dedicated app.js in that folder)
+  Rules (as implemented):
+  - gross = grossMonthlyDzd + allowancesDzd
+  - social = gross * (employeeSocialRatePct/100) if rate>0 else 0
+  - taxBase = max(0, gross - social)
+  - tax = (taxBase * taxRatePct/100) if taxMode=="flatRate" and taxRatePct>0 else 0
+  - netMonthly = max(0, gross - social - tax - otherDeductionsDzd)
+  - netShown = netMonthly*12 if payFrequency=="yearly" else netMonthly
+  - outputs are displayed as integers (rounded) with " DZD"
+
+- Zakat: /calcul-zakat-dzd/ (dedicated app.js)
+  Rules:
+  - goldValue = goldGrams * goldPricePerGramDzd
+  - silverValue = silverGrams * silverPricePerGramDzd
+  - assets = cashDzd + inventoryDzd + receivablesDzd + goldValue + silverValue
+  - zakatable = max(0, assets - debtsDueDzd)
+  - nisab:
+      if nisabMethod=="gold": nisab = goldPricePerGramDzd * goldNisabGrams (default 85)
+      else: nisab = silverPricePerGramDzd * silverNisabGrams (default 595)
+    missingPrice if chosen metal price <=0 => show "Prix manquant", zakat due 0
+  - zakatRatePct default 2.5
+  - isDue = !missingPrice && zakatable >= nisab && nisab>0
+  - zakatDue = isDue ? zakatable*(zakatRatePct/100) : 0
+  - zakatDue is displayed with 2 decimals, others rounded integer DZD
+
+- Visa cost: /visa-france-cout/ (dedicated app.js)
+  Rules:
+  - displayCurrency is either DZD or EUR (all input fields are interpreted in display currency)
+  - internal sum uses DZD:
+      toDzd(x) = x*rate if display==EUR else x
+      totalDzd = sum(toDzd(all six amounts))
+  - output display:
+      if display==EUR => show totalDzd/rate formatted EUR with 2 decimals
+      else show DZD integer
+  - if display==EUR and eurToDzdRate<=0: show total "—" and breakdown "—" and status prompting rate
+  - applicantType suggestion sets visaFeeEur only if field empty:
+      adult=80, child_6_11=40, child_under_6 or exempt=0
+      If display=DZD => suggestion converted using rate (if rate<=0, do nothing)
+  - currency switch converts all amount fields if rate exists; switching to EUR requires rate else revert selector and show note
+
+Task:
+1) Write a Playwright-based test suite that validates the numeric correctness of displayed results for each calculator using the rules above.
+2) Tests must interact through the UI (fill inputs, change selects, trigger calc), then read DOM output values and compare against expected values computed in the test code (independent reference calc).
+3) Add at least:
+   - Salary: 12 test cases
+   - Zakat: 12 test cases
+   - Visa: 15 test cases (because currency switch + presets + suggestion + rate gating)
+4) Cover edge cases:
+   - Empty inputs (should produce prompts / zero / “—” depending on page)
+   - Negative and non-numeric input (should clamp to 0 due to clamp0; verify)
+   - Very large values (no overflow; formatting stays correct)
+   - Rounding behavior (salary and most zakat fields round to integer DZD; zakatDue has 2 decimals; EUR has 2 decimals)
+   - For visa: verify missing rate in EUR mode, suggestion behavior, convertAmounts behavior, and presetTypical filling logic.
+
+5) If any mismatch is found:
+   - Fix the app.js logic or UI parsing/formatting (minimal change)
+   - Add regression tests for the bug
+   - Keep compatibility with GitHub Pages (no build tooling)
+   - Keep consent/GA logic untouched
+
+6) Deliverables:
+   - tests folder + a single command to run tests
+   - a short report per calculator: selectors used, cases tested, issues found, fixes applied
+
+Implementation notes:
+- Parse displayed "DZD" and "€" outputs back into numbers in tests (remove spaces, NBSP, currency symbols, french formatting, commas).
+- Be robust to fr-FR grouping (spaces/nbsp) and comma decimal separators.
+- Use stable selectors: prefer element ids already in code (netDisplay, bGross, zakatDue, totalDisplay, etc). If some outputs lack ids, add ids (minimal HTML change) and update tests accordingly.
+- Ensure tests set the currency selector and rate explicitly to avoid flakiness due to live fetch.
+- Disable or bypass service worker in tests if it causes caching issues.
+- In Playwright, mock or block network calls to https://open.er-api.com and always set eurToDzdRate explicitly in the test to keep tests deterministic.
+
+Start by:
+- Locating each calculator’s app.js path
+- Listing all relevant input ids and output ids per page
+- Writing 3 tests per calculator as a pilot, then expand to full suite
+- Run the suite locally and fix any failing cases

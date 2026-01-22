@@ -4,10 +4,19 @@ const CORE_ASSETS = [
   "/",
   "/index.html",
   "/manifest.webmanifest",
-  "/icons/icon-192.png",
-  "/icons/icon-512.png",
-  "/icons/maskable-512.png",
-  "/icons/apple-touch-icon-180.png",
+  "/favicon.ico",
+  "/assets/icon-192.png",
+  "/assets/icon-512.png",
+  "/assets/maskable-512.png",
+  "/assets/apple-touch-icon-180.png",
+  "/assets/cookies.css",
+  "/assets/cookies.js",
+  "/salaire-net-algerie/styles.css",
+  "/salaire-net-algerie/app.js",
+  "/visa-france-cout/styles.css",
+  "/visa-france-cout/app.js",
+  "/calcul-zakat-dzd/styles.css",
+  "/calcul-zakat-dzd/app.js",
 
   // calculators entry points (adjust if filenames differ)
   "/salaire-net-algerie/",
@@ -54,6 +63,23 @@ self.addEventListener("fetch", (event) => {
   }
 
   event.respondWith(
-    caches.match(req).then((cached) => cached || fetch(req))
+    caches.match(req).then((cached) => {
+      const fetchPromise = fetch(req)
+        .then((res) => {
+          if (res && res.ok) {
+            const copy = res.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
+          }
+          return res;
+        })
+        .catch(() => cached);
+
+      if (cached) {
+        event.waitUntil(fetchPromise);
+        return cached;
+      }
+
+      return fetchPromise;
+    })
   );
 });
