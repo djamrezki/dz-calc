@@ -1,4 +1,4 @@
-const CACHE_NAME = "aljiz-v1";
+const CACHE_NAME = "aljiz-v2"; // bump version so users get the new SW
 
 const CORE_ASSETS = [
   "/",
@@ -17,8 +17,6 @@ const CORE_ASSETS = [
   "/visa-france-cout/app.js",
   "/calcul-zakat-dzd/styles.css",
   "/calcul-zakat-dzd/app.js",
-
-  // calculators entry points (adjust if filenames differ)
   "/salaire-net-algerie/",
   "/visa-france-cout/",
   "/calcul-zakat-dzd/"
@@ -40,21 +38,49 @@ self.addEventListener("activate", (event) => {
   self.clients.claim();
 });
 
-// Network-first for HTML, cache-first for static assets
+function isAnalyticsHost(hostname) {
+  return (
+    hostname === "www.google-analytics.com" ||
+    hostname === "google-analytics.com" ||
+    hostname.endsWith(".google-analytics.com") ||
+    hostname === "www.googletagmanager.com" ||
+    hostname === "googletagmanager.com" ||
+    hostname.endsWith(".googletagmanager.com") ||
+    hostname.endsWith(".doubleclick.net") ||
+    hostname === "region1.google-analytics.com"
+  );
+}
+
 self.addEventListener("fetch", (event) => {
   const req = event.request;
+  const url = new URL(req.url);
 
+  // 1) Never touch analytics/tag requests (GET/POST/anything)
+  if (isAnalyticsHost(url.hostname)) {
+    return; // let the browser handle it normally
+  }
+
+  // 2) Don't handle non-GET (keeps SW from interfering with POSTs)
   if (req.method !== "GET") return;
+
+  // 3) Only cache same-origin requests (avoid caching third-party assets)
+  if (url.origin !== self.location.origin) {
+    return;
+  }
 
   const accept = req.headers.get("accept") || "";
   const isHTML = accept.includes("text/html");
 
+  // Network-first for HTML
   if (isHTML) {
     event.respondWith(
       fetch(req)
         .then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
+          // Only cache successful basic (same-origin) responses
+          if (res && res.ok && res.type === "basic") {
+            const copy = res.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
+          }
           return res;
         })
         .catch(() => caches.match(req).then((r) => r || caches.match("/")))
@@ -62,11 +88,12 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
+  // Cache-first for static
   event.respondWith(
     caches.match(req).then((cached) => {
       const fetchPromise = fetch(req)
         .then((res) => {
-          if (res && res.ok) {
+          if (res && res.ok && res.type === "basic") {
             const copy = res.clone();
             caches.open(CACHE_NAME).then((cache) => cache.put(req, copy));
           }
